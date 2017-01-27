@@ -16,8 +16,10 @@ class App extends React.Component {
       image: null,
       bio: null,
       occupation: null,
+      position: { left: 500, top: 200 },
     }
     this.logMeIn = this.logMeIn.bind(this);
+    this.handleMouseDown = this.handleMouseDown.bind(this);
   }
 
   fetchData(person) {
@@ -55,6 +57,12 @@ class App extends React.Component {
     });
   }
 
+  handleMouseDown (e) {
+    const xClick = e.clientX;
+    const yClick = e.clientY;
+    this.setState({ position: { left: e.clientX, top: e.clientY }});
+  }
+
   render() {
     const login = <Login name="hi" login={this.logMeIn} />;
     const mainContent =
@@ -64,10 +72,11 @@ class App extends React.Component {
       age={this.state.age}
       bio={this.state.bio}
       occupation={this.state.occupation}
+      position={this.state.position}
     />;
     let content = this.state.loggedIn === false ? mainContent : login;
     return (
-      <div className="iphone">
+      <div className="iphone" onMouseDown={this.handleMouseDown} >
         <div className="content-container">
           <Header />
           {content}

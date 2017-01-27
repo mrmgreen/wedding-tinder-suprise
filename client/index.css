@@ -1,6 +1,5 @@
 body {
   background-color: fff;
-  cursor: url('/images/fingers/holly.png'), auto;
 }
 
 .image-container {
@@ -9,8 +8,6 @@ body {
 
 .content-container {
     position: absolute;
-    margin-left: calc(50% - 150px);
-    margin-top: 110px;
 }
 
 .header {
@@ -21,10 +18,9 @@ body {
   height: 50px;
 }
 
-
 .image-container img {
-  max-width: 100%;
-  padding: calc(100% - 500px);
+  border: 5px double grey;
+  transition: padding-left .40s ease;
 }
 
 .iphone {

@@ -4,46 +4,70 @@ import Meta from './meta';
 class MainContent extends React.Component {
   constructor(props) {
     super(props);
-    this.handleOnClick = this.handleOnClick.bind(this);
-    this.handleDragStart = this.handleDragStart.bind(this);
-    this.handleOnDrop = this.handleOnDrop.bind(this);
-    this.handleDragOver = this.handleDragOver.bind(this);
+    // this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
+    this.state = {
+      onMouseMove: false,
+      position: {
+        left: this.props.position.left,
+        top: this.props.position.top,
+      }
+    }
+  }
+  moveImageToClickPosition (left, top) {
+    let x;
+    let y;
+    if (this.imageNode) {
+      const dimensions = this.imageNode.getBoundingClientRect();
+      console.log('dims = ', dimensions)
+      x = dimensions.width/2;
+      y = dimensions.height/2
+    }
+    this.setState({ position: {
+      left: left - x,
+      top: top - y,
+    } })
   }
 
-  handleOnClick(e) {
-    console.log('clicked')
-  }
+  componentWillReceiveProps(newProps) {
+    const left = newProps.position.left;
+    const top = newProps.position.top;
+    const oldLeft = this.props.position.left;
+    const oldTop = this.props.position.top;
 
-  handleDragStart(e) {
-    console.log('handleDragStart', e.clientX, e.clientY);
-    e.dataTransfer.setData('profileImage', JSON.stringify({ name: this.props.name }));
-  }
-
-  handleOnDrop(e) {
-    console.log('handleOnDrop', e.clientX, e.clientY);
-    const stringData = e.dataTransfer.getData('profileImage');
-    if (stringData) {
-      const data = JSON.parse(stringData);
-      console.log(data);
+    if (left && top) { left !== oldLeft && top !== oldTop ?
+      this.moveImageToClickPosition(left, top)
+      : null;
     }
   }
 
-  handleDragOver(e) {
-    console.log('handleDragOver');
-    e.preventDefault();
+  // handleMouseMove (e) {
+  //   const imageBounds = e.target.getBoundingClientRect();
+  //   const imageLeft = imageBounds.left;
+  //   const imageTop = imageBounds.top;
+  //   const xClick = e.clientX - imageLeft;
+  //   const yClick = e.clientY - imageTop;
+  //   const moveTo = xClick;
+  //   console.log('xClick and y', xClick, yClick);
+  //   this.setState({ imageLeft: moveTo });
+  // }
+
+  handleMouseUp (e) {
+    this.setState({ onMouseMove: false });
   }
 
   render() {
+
     return (
       <div>
         <h2>Main content</h2>
         <div className="image-container"
           onClick={this.handleOnClick}
-          onDragStart={this.handleDragStart}
-          onDrop={this.handleOnDrop}
-          onDragOver={this.handleDragOver}
+          onMouseMove={this.state.onMouseMove ? this.handleMouseMove : null}
+          onMouseUp={this.handleMouseUp}
+          style={{ position: "absolute", left: `${this.state.position.left}px`, top: `${this.state.position.top}px` }}
         >
-          <img src={this.props.image} />
+          <img src={this.props.image} draggable="false" ref={node => this.imageNode = node} />
         </div>
         <Meta
           name={this.props.name}
@@ -62,6 +86,7 @@ MainContent.propTypes = {
   age: React.PropTypes.number,
   bio: React.PropTypes.string,
   occupation: React.PropTypes.string,
+  position: React.PropTypes.object,
 }
 
 export default MainContent;
