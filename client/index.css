@@ -3,7 +3,7 @@ body {
 }
 
 .image-container {
-  width: 300px;
+  width: 330px;
 }
 
 .content-container {
@@ -19,7 +19,17 @@ body {
 }
 
 .image-container img {
-  border: 5px double grey;
+  border: 5px solid black;
+  transition: padding-left .40s ease;
+}
+
+.image-container.loveHotel img {
+  border: 5px solid green;
+  transition: padding-left .40s ease;
+}
+
+.image-container.noLoveHotel img {
+  border: 5px solid red;
   transition: padding-left .40s ease;
 }
 

@@ -16,13 +16,21 @@ class App extends React.Component {
       image: null,
       bio: null,
       occupation: null,
-      position: { left: 500, top: 200 },
+      // position: { left: 500, top: 200 },
+      position: this.getImagePosition(),
       onMouseMove: false,
     }
     this.logMeIn = this.logMeIn.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
+  }
+
+  getImagePosition() {
+    return {
+      left: 500,
+      top: 400,
+    }
   }
 
   fetchData(person) {

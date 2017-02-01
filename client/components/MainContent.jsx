@@ -6,12 +6,27 @@ class MainContent extends React.Component {
     super(props);
     this.state = {
       onMouseMove: false,
-      position: {
-        left: this.props.position.left,
-        top: this.props.position.top,
+      position: this.getImagesInitialPosition(),
+    }
+  }
+
+  getImagesInitialPosition() {
+    const width = 330;
+    const height = 330;
+    const leftPosOfImage = (window.innerWidth/2) - (width/2);
+    const topPosOfImage = (window.innerHeight/2) - (height/2);
+    console.log('leftPos ==', leftPosOfImage)
+
+    return {
+      left: leftPosOfImage,
+      top: topPosOfImage,
+      initialPosition: {
+        left: leftPosOfImage,
+        top: topPosOfImage,
       }
     }
   }
+
   moveImageToClickPosition (left, top) {
     let x;
     let y;
@@ -20,10 +35,17 @@ class MainContent extends React.Component {
       x = dimensions.width/2;
       y = dimensions.height/2
     }
-    this.setState({ position: {
-      left: left - x,
-      top: top - y,
-    } })
+
+    const initLeft = this.state.position.initialPosition.left;
+    const newImageLeftCoords = left - x;
+
+    if (newImageLeftCoords- initLeft <= -100) {
+      this.setState({ loveHotel: false, position: Object.assign({}, this.state.position, { left: left - x, top: top - y }) });
+    } else if (newImageLeftCoords - initLeft >= 100) {
+      this.setState({ loveHotel: true, position: Object.assign({}, this.state.position, { left: left - x, top: top - y }) });
+    } else {
+      this.setState({ loveHotel: null, position: Object.assign({}, this.state.position, { left: left - x, top: top - y }) });
+    }
   }
 
   componentWillReceiveProps(newProps) {
@@ -43,11 +65,12 @@ class MainContent extends React.Component {
     return (
       <div>
         <h2>Main content</h2>
-        <div className="image-container"
+        <div className={"image-container" + (this.state.loveHotel === true ? ' loveHotel' : this.state.loveHotel === false ? ' noLoveHotel' : '')}
+          ref={node => this.imageNode = node}
           onClick={this.handleOnClick}
           style={{ position: "absolute", left: `${this.state.position.left}px`, top: `${this.state.position.top}px` }}
         >
-          <img src={this.props.image} draggable="false" ref={node => this.imageNode = node} />
+          <img src={this.props.image} draggable="false" />
         </div>
         <Meta
           name={this.props.name}
