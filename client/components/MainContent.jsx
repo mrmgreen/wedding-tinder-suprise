@@ -13,8 +13,8 @@ class MainContent extends React.Component {
   getImagesInitialPosition() {
     const width = 330;
     const height = 330;
-    const leftPosOfImage = (window.innerWidth/2) - (width/2);
-    const topPosOfImage = (window.innerHeight/2) - (height/2);
+    const leftPosOfImage = 542;
+    const topPosOfImage = 240;
     console.log('leftPos ==', leftPosOfImage)
 
     return {
@@ -65,12 +65,14 @@ class MainContent extends React.Component {
     return (
       <div>
         <h2>Main content</h2>
-        <div className={"image-container" + (this.state.loveHotel === true ? ' loveHotel' : this.state.loveHotel === false ? ' noLoveHotel' : '')}
-          ref={node => this.imageNode = node}
-          onClick={this.handleOnClick}
-          style={{ position: "absolute", left: `${this.state.position.left}px`, top: `${this.state.position.top}px` }}
-        >
-          <img src={this.props.image} draggable="false" />
+        <div className="imageWrapper">
+          <div className={"image-container" + (this.state.loveHotel === true ? ' loveHotel' : this.state.loveHotel === false ? ' noLoveHotel' : '')}
+            ref={node => this.imageNode = node}
+            onClick={this.handleOnClick}
+            style={{ position: "absolute", left: `${this.state.position.left}px`, top: `${this.state.position.top}px` }}
+          >
+            <img src={this.props.image} draggable="false" />
+          </div>
         </div>
         <Meta
           name={this.props.name}
