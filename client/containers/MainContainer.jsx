@@ -1,12 +1,14 @@
 import React from 'react';
-import Login from './login';
-import isLoggedIn from '../container/isLoggedIn';
-import MainContent from './MainContent';
-import Header from './Header';
+import { connect } from 'react-redux';
+import Login from '../components/login';
+import isLoggedIn from './isLoggedIn';
+import MainContent from '../components/MainContent';
+import Header from '../components/Header';
 const path = require('path');
 import data from '../../data';
+import currentProfile from '../actions';
 
-class App extends React.Component {
+class MainContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,21 +18,13 @@ class App extends React.Component {
       image: null,
       bio: null,
       occupation: null,
-      // position: { left: 500, top: 200 },
-      position: this.getImagePosition(),
+      position: { left: 500, top: 200 },
       onMouseMove: false,
     }
     this.logMeIn = this.logMeIn.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
-  }
-
-  getImagePosition() {
-    return {
-      left: 500,
-      top: 400,
-    }
   }
 
   fetchData(person) {
@@ -80,6 +74,7 @@ class App extends React.Component {
 
   handleMouseUp (e) {
     this.setState({ onMouseMove: false });
+
   }
 
   render() {
@@ -109,7 +104,14 @@ class App extends React.Component {
   }
 }
 
-App.proptTypes = {
+MainContainer.propTypes = {
   params: React.PropTypes.object,
+};
+
+function mapStateToProps(state) {
+  return {
+    currentProfile: state.currentProfile,
+  }
 }
-export default App;
+
+export default connect(mapStateToProps)(MainContainer);
